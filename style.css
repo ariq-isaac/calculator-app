@@ -1,0 +1,91 @@
+body {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+/*----------DISPLAY----------*/
+.display {
+    background-color: white;
+    width: 480px;
+    height: 200px;
+    border: 2px solid black;
+    border-radius: 2rem;
+}
+/*--------------------------*/
+
+/*----------ALL BUTTONS----------*/
+
+/*Apply display: flex to buttons so numbers and controls on left*/
+/*And Operators on right*/
+.buttons {
+    display: flex;
+}
+
+.controls {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 3px;
+}
+
+/* Adds display flex and flex direction: column so can add gap*/
+.operators {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/*Left side of buttons*/
+.main-keys {
+    display: flex;
+    flex-direction: column;
+}
+
+/*Numbers container*/
+#numbers-container {
+    width: 369px;
+    gap: 3px;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    flex: 1 1 auto;
+}
+
+.btn {
+    font-size: 25px;
+    font-weight: bold;
+
+    background-color: white;
+
+    width: 120px;
+    height: 120px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex: 0 0 auto;
+
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 5rem;
+}
+/*-------------------------------*/
+
+
+/*----------------------------------------------*/
+/*---------------------STYLE--------------------*/
+/*----------------------------------------------*/
+.operators .btn.equal {
+    background-color: orange;
+}
+
+.operators .btn,
+.controls .btn {
+    background-color: silver;
+    font-size: 30px;
+}
+
+
