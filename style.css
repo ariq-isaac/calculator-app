@@ -12,6 +12,15 @@ body {
     height: 200px;
     border: 2px solid black;
     border-radius: 2rem;
+
+    margin-bottom: 5px;
+
+    /* Aligns the text to the middle right side of display */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 10px;
+    font-size: 50px;
 }
 /*--------------------------*/
 
@@ -89,3 +98,20 @@ body {
 }
 
 
+/* HOVER EFFECT */
+#numbers-container .btn:hover {
+    background-color: lightblue;
+
+}
+
+.main-keys .controls .btn:hover,
+.operators .operator:hover
+{
+    background-color: grey;
+    color: white;
+}
+
+.operators .equal:hover {
+    background-color: white;
+    color: orange;
+}
