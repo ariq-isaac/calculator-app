@@ -1,7 +1,7 @@
 body {
+    background-color: #f0f0f0;
     display: flex;
     flex-direction: column;
-
     align-items: center;
 }
 
@@ -87,13 +87,16 @@ body {
 /*----------------------------------------------*/
 /*---------------------STYLE--------------------*/
 /*----------------------------------------------*/
-.operators .btn.equal {
+.operators .btn {
     background-color: orange;
+}
+
+.controls .btn {
+    background-color: silver;
 }
 
 .operators .btn,
 .controls .btn {
-    background-color: silver;
     font-size: 30px;
 }
 
@@ -104,14 +107,15 @@ body {
 
 }
 
-.main-keys .controls .btn:hover,
-.operators .operator:hover
+.main-keys .controls .btn:hover
 {
     background-color: grey;
     color: white;
 }
 
-.operators .equal:hover {
+.operators .equal:hover,
+.operators .operator:hover
+{
     background-color: rgb(255, 195, 84);
     color: white;
 }
