@@ -57,10 +57,13 @@ function buttonClicked (event) {
             return
         case "÷":
             operation = divide;
+            return
         case "-":
             operation = subtract;
+            return
         case "+":
             operation = add;
+            return
         default:
             return;
     }
