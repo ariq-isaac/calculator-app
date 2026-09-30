@@ -112,6 +112,6 @@ body {
 }
 
 .operators .equal:hover {
-    background-color: white;
-    color: orange;
+    background-color: rgb(255, 195, 84);
+    color: white;
 }
