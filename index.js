@@ -14,14 +14,20 @@ function divide (a, b) {
     return a / b;
 }
 
-let displayText;
-let firstNum;
-let secondNum;
+let firstOperand;
 let operation;
+let currentInput;
+
+const operationRules = {
+    '+': add,
+    '-': subtract,
+    'x': multiply,
+    '÷': divide
+};
 
 function operate (operator, x, y) {
     return operator(x, y);
-}
+};
 
  // ------------------------------------------------------
  // Fetch dom elements
@@ -42,74 +48,43 @@ const deleteBtn = document.querySelector(".delete");
 // PercentageBtn
 const percentBtn = document.querySelector(".percentage");
 
- // ------------------------------------------------------
- // Functions used for callbacks
- // ------------------------------------------------------
+// ------------------------------------------------------
+// Functions used for callbacks
+// ------------------------------------------------------
 
-// Function for Number buttons
-function buttonClicked (event) {
-    const buttonValue = event.target.textContent;
-    display.textContent += buttonValue;
+// the function that the number and operator button will accept as callback
+function operatorHandler(input) {
 
-    switch (buttonValue) {
-        case "x":
-            operation = multiply;
-            return
-        case "÷":
-            operation = divide;
-            return
-        case "-":
-            operation = subtract;
-            return
-        case "+":
-            operation = add;
-            return
-        default:
-            return;
+    // Check if input is an operator
+    const isOperator = (
+        input === '-' || 
+        input === '+' || 
+        input === 'x' || 
+        input === '÷'
+    );
+
+    // Press 1: currentInput = '1'
+    currentInput = input;
+    
+    // Press +: firstOperant = '1', operator = '+' and clear currentInput
+    if (isOperator) {
+        firstOperand = currentInput;
+        currentInput = "";
+        operation = input;
     }
-};
+    
+    // Press 2: currentInput = '2'
 
-
-function calculate (event) {
-    // uses .split() on the display text content
-    // to split numbers with operators
-    const displayContent = display.textContent;
-    displayText = displayContent.split(/[÷x+-]/);
-
-    firstNum = Number(displayText[0]);
-    secondNum = Number(displayText[1])
-
-    const result = operate(operation, firstNum, secondNum);
-    display.textContent = result;
+    // Press -: operator already pending, and theres a second number,
+    //    so evaluate 1 + 2 = 3, then display 3, set firstOperator = 3,
+    //    and set operator = '-'
+    if (firstOperand && isOperator && currentInput) {
+        firstOperand = operate(operationRules[operation], firstOperand, currentInput);
+        operation = input;
+        currentInput = "";
+    }
 }
 
- // ------------------------------------------------------
- // Events
- // ------------------------------------------------------
-
-// Adds event listener to number buttons {1, 2, 3, 4, 5, 6, 7, 89, 0, 00, .}
-numberBtn.forEach(
-    (button) => button.addEventListener("click", buttonClicked)
-);
-// Adds event listener to operators 
-operatorsBtn.forEach(
-    (button) => button.addEventListener("click", buttonClicked)
-);
-// Adds event listener to All Clear button
-allClearBtn.addEventListener(
-    "click",
-    () => display.textContent = ""
-);
-// Adds event listener to delete button
-deleteBtn.addEventListener(
-    "click",
-    () => {
-        let displayContent = display.textContent;
-        display.textContent = displayContent.slice(0, -1);
-    }
-);
-// Adds event listener to percentage button
-percentBtn.addEventListener("click", buttonClicked);
-
-// Adds event listener to equal button
-equalBtn.addEventListener("click", calculate);
+// ------------------------------------------------------
+// Events
+// ------------------------------------------------------
