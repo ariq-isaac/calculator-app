@@ -14,9 +14,10 @@ function divide (a, b) {
     return a / b;
 }
 
-let firstOperand;
-let operation;
-let currentInput;
+let firstOperand = null;
+let operation = null;
+let currentInput = "";
+let justEvaluated = false;
 
 const operationRules = {
     '+': add,
@@ -52,39 +53,119 @@ const percentBtn = document.querySelector(".percentage");
 // Functions used for callbacks
 // ------------------------------------------------------
 
-// the function that the number and operator button will accept as callback
-function operatorHandler(input) {
+// Shows the numbers being typed
+function updateDisplay() {
+    display.textContent = currentInput || firstOperand || "0";
+}
 
-    // Check if input is an operator
-    const isOperator = (
-        input === '-' || 
-        input === '+' || 
-        input === 'x' || 
-        input === '÷'
-    );
+function resetState() {
+    firstOperand = null;
+    operation = null;
+    currentInput = "";
+    justEvaluated = false;
+}
 
-    // Press 1: currentInput = '1'
-    currentInput = input;
-    
-    // Press +: firstOperant = '1', operator = '+' and clear currentInput
-    if (isOperator) {
+// Runs firstOperand (operation) currentInput and stores the result in firstOperand
+function evaluate() {
+    const a = Number(firstOperand);
+    const b = Number(currentInput);
+
+    if (operation === "÷" && b === 0) {
+        resetState();
+        display.textContent = "Cannot divide by zero!";
+        return false;
+    }
+
+    const result = operate(operationRules[operation], a, b);
+
+    // Round long decimals
+    firstOperand = String(Math.round(result * 1e10) / 1e10);
+    currentInput = "";
+    return true;
+}
+
+function handleNumber(event) {
+    const digit = event.target.textContent;
+
+    // A result is on screen, so start a brand new calculation
+    if (justEvaluated) resetState();
+
+    // Only one decimal point per number
+    if (digit === "." && currentInput.includes(".")) return;
+
+    // "." on an empty input becomes "0."
+    if (digit === "." && currentInput === "") {
+        currentInput = "0.";
+        updateDisplay();
+        return;
+    }
+
+    // Avoid leading zeros like 007 or 00
+    if ((digit === "0" || digit === "00") && (currentInput === "" || currentInput === "0")) {
+        currentInput = "0";
+        updateDisplay();
+        return;
+    }
+    if (currentInput === "0" && digit != ".") {
+        currentInput = digit;
+        updateDisplay();
+        return;
+    }
+
+    currentInput += digit;
+    updateDisplay();
+}
+
+function handleOperator(event) {
+    const op = event.target.textContent;
+
+    // Nothing to operate yet
+    if (firstOperand === null && currentInput === "") return;
+
+    // Both numbers and an operator exist = evaluate the pair first (chaining)
+    if (firstOperand !== null && operation && currentInput !== "") {
+        if (!evaluate()) return;
+    }
+    // Very first operator: move the typed number into firstOperand
+    else if (firstOperand === null) {
         firstOperand = currentInput;
         currentInput = "";
-        operation = input;
     }
-    
-    // Press 2: currentInput = '2'
 
-    // Press -: operator already pending, and theres a second number,
-    //    so evaluate 1 + 2 = 3, then display 3, set firstOperator = 3,
-    //    and set operator = '-'
-    if (firstOperand && isOperator && currentInput) {
-        firstOperand = operate(operationRules[operation], firstOperand, currentInput);
-        operation = input;
-        currentInput = "";
-    }
+    // If no number was typed since the last operator, this just swaps the operator
+    operation = op;
+    justEvaluated = false;
+    updateDisplay();
+}
+
+function handleEquals() {
+    // Needs two numbers and an operator
+    if (firstOperand === null || !operation || currentInput === "") return;
+
+    if (!evaluate()) return;
+
+    operation = null;
+    justEvaluated = true;
+    updateDisplay();
+}
+
+function handleDelete() {
+    if (justEvaluated) return;
+    currentInput = currentInput.slice(0, -1);
+    updateDisplay();
+}
+
+function handleClear() {
+    resetState();
+    updateDisplay();
 }
 
 // ------------------------------------------------------
 // Events
 // ------------------------------------------------------
+
+numberBtn.forEach((btn) => btn.addEventListener("click", handleNumber));
+operatorsBtn.forEach((btn) => btn.addEventListener("click", handleOperator));
+equalBtn.addEventListener("click", handleEquals);
+deleteBtn.addEventListener("click", handleDelete);
+allClearBtn.addEventListener("click", handleClear);
